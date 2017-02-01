@@ -16,4 +16,4 @@
   vars_files:
     - vars.yml
   roles:
-    - role: Maarc.rh-jboss-eap
+    - role: mm0.rh-jboss-eap
