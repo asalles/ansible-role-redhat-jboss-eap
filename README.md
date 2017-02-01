@@ -1,4 +1,4 @@
-Ansible role: "Red Hat JBoss EAP" [![Build Status](https://travis-ci.org/Maarc/ansible-role-redhat-jboss-eap.svg?branch=master)](https://travis-ci.org/Maarc/ansible-role-redhat-jboss-eap) [![Galaxy](https://img.shields.io/badge/galaxy-maarc.rh--jboss--eap-blue.svg?style=flat)](https://galaxy.ansible.com/Maarc/rh-jboss-eap)
+Ansible role: "Red Hat JBoss EAP" [![Build Status](https://travis-ci.org/mm0/ansible-role-redhat-jboss-eap.svg?branch=master)](https://travis-ci.org/mm0/ansible-role-redhat-jboss-eap) [![Galaxy](https://img.shields.io/badge/galaxy-mmo.rh--jboss--eap-blue.svg?style=flat)](https://galaxy.ansible.com/mm0/rh-jboss-eap)
 =================================
 
 
@@ -15,7 +15,7 @@ Core implemented features in this role:
 - application deployment using nexus or local files
 - configuration of the Red Hat JBoss EAP instances using the CLI
 
-Please have a look at [this example](https://github.com/Maarc/ansible_middleware_soe) showing how to easily operate Red Hat JBoss middleware products using this role.
+Please have a look at [this example](https://github.com/mm0/ansible_middleware_soe) showing how to easily operate Red Hat JBoss middleware products using this role.
 
 
 Requirements
@@ -27,9 +27,9 @@ This role has been tested on Ansible 2.0.2.0 and 2.1.1.0. It requires Red Hat En
 Dependencies
 ------------
 
-The "Maarc.rh-jboss-common" role is required. It could be imported as follows:
+The "mm0.rh-jboss-common" role is required. It could be imported as follows:
 
-    ansible-galaxy install Maarc.rh-jboss-common -p roles
+    ansible-galaxy install mm0.rh-jboss-common -p roles
 
 or
 
@@ -39,7 +39,7 @@ or
 Installation
 ------------
 
-    ansible-galaxy install Maarc.rh-jboss-eap -p roles
+    ansible-galaxy install mm0.rh-jboss-eap -p roles
 
 
 Role Variables
@@ -108,7 +108,7 @@ Here is a playbook creating three JBoss EAP instances on every host in "jboss-gr
       roles:
         # JBoss EAP 7 instance for the ticket-monster application
         - {
-            role: "Maarc.rh-jboss-eap",
+            role: "mm0.rh-jboss-eap",
             jboss_eap_golden_image_name: "jboss-eap-6.4.8_GI",
             jboss_eap_instance_name: "ticket_monster",
             jboss_eap_instance_standalone_file: "standalone-full-ha.xml",
@@ -118,7 +118,7 @@ Here is a playbook creating three JBoss EAP instances on every host in "jboss-gr
         }
         # JBoss EAP 7 instance for the petclinic application
         - {
-            role: "Maarc.rh-jboss-eap",
+            role: "mm0.rh-jboss-eap",
             jboss_eap_golden_image_name: "jboss-eap-7.0.1_GI",
             jboss_eap_instance_name: "petclinic",
             jboss_eap_instance_standalone_file: "standalone-full-ha.xml",
@@ -128,7 +128,7 @@ Here is a playbook creating three JBoss EAP instances on every host in "jboss-gr
         }
         # JBoss EAP 7 instance for the jenkins application
         - {
-            role: "Maarc.rh-jboss-eap",
+            role: "mm0.rh-jboss-eap",
             jboss_eap_golden_image_name: "jboss-eap-7.0.1_GI",
             jboss_eap_instance_name: "jenkins",
             jboss_eap_instance_standalone_file: "standalone-full-ha.xml",

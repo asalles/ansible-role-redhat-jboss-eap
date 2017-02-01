@@ -1,7 +1,7 @@
 ---
 
 # Directory containing the unpacked golden image.
-jboss_home: "{{ jboss.user_home }}/{{ jboss_eap_golden_image_name }}"
+jboss_home: "{{ jboss.user_home }}/jboss-eap-{{ jboss_eap_version }}"
 
 # Check directory (local copy of the instance directory to check changes and updates)
 jboss_eap_check_dir: "{{ download_dir }}/standalone_{{ jboss_eap_instance_name }}"

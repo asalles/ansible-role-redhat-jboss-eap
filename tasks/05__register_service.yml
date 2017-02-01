@@ -4,7 +4,7 @@
   template:
     owner: "{{ jboss.user }}"
     group: "{{ jboss.group }}"
-    src: jboss-as-standalone.service.j2
+    src: jboss-eap-rhel.service.j2
     dest: "/etc/systemd/system/{{ jboss_eap_instance_service_name }}.service"
     mode: "0750"
   register: conf_service

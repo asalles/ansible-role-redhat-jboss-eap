@@ -13,7 +13,14 @@
     group: "{{ jboss.group }}"
   register: copy_zip_state
 
-# This command fails with ansible 2.1.0.0
+#check for target extraction directory
+- name: Ensures JBoss user dir exists
+  file: 
+    path: "{{jboss.user_home}}" 
+    state: directory 
+    owner: "{{ jboss.user }}" 
+    group: "{{ jboss.group }}"
+
 - name: "{{ jboss_eap_instance_name }} (01) Extract JBoss EAP zipped distribution"
   # new version or no installation so far
   when: jboss_eap_exists.stat.exists == false or copy_zip_state.changed == true

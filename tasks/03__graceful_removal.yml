@@ -2,11 +2,11 @@
 
 - name: "{{ jboss_eap_instance_name }} (03) Check existence of the init.d script"
   stat:
-    path: "{{ jboss_eap_instance_dir }}/service/jboss-as-standalone.sh"
-  register: jboss_as_standalone_sh
+    path: "{{ jboss_eap_instance_dir }}/service/jboss-eap-rhel.sh"
+  register: jboss_eap_rhel_sh
 
 - name: "{{ jboss_eap_instance_name }} (03) Stop JBoss EAP"
-  when: jboss_as_standalone_sh.stat.exists
+  when: jboss_eap_rhel_sh.stat.exists
   ignore_errors: yes
   service:
     name: "{{ jboss_eap_instance_service_name }}"

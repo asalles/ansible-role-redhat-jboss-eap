@@ -22,4 +22,4 @@ allow_duplicates: yes
 
 # Empty as otherwise the Galaxy import does not work as expected.
 dependencies:
-  - role: Maarc.rh-jboss-common
+  - role: mm0.rh-jboss-common

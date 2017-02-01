@@ -28,26 +28,26 @@
       state: directory
       mode: "0750"
 
-  - name: "{{ jboss_eap_instance_name }} {{ info }} Copy init.d script (jboss-as-standalone.sh)"
+  - name: "{{ jboss_eap_instance_name }} {{ info }} Copy init.d script (jboss-eap-rhel.sh)"
     copy:
       remote_src: true
       owner: "{{ jboss.user }}"
       group: "{{ jboss.group }}"
-      src: "{{ jboss_home }}/bin/init.d/jboss-as-standalone.sh"
-      dest: "{{ target_dir }}/service/jboss-as-standalone.sh"
+      src: "{{ jboss_home }}/bin/init.d/jboss-eap-rhel.sh"
+      dest: "{{ target_dir }}/service/jboss-eap-rhel.sh"
       mode: "0750"
 
   when: conf_00.stat.isdir is undefined or conf_00.stat.isdir == False
 
-- name: "{{ jboss_eap_instance_name }} {{ info }} Update service init.d script (jboss-as-standalone.sh)"
+- name: "{{ jboss_eap_instance_name }} {{ info }} Update service init.d script (jboss-eap-rhel.sh)"
   lineinfile:
-    dest: "{{ target_dir }}/service/jboss-as-standalone.sh"
+    dest: "{{ target_dir }}/service/jboss-eap-rhel.sh"
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     backrefs: yes
   with_items:
     # Setting the correct JBOSS_CONF file
-    - { regexp: '^(.*)JBOSS_CONF=(.*)$', line: "\\1JBOSS_CONF=\"{{ jboss_eap_instance_dir }}/service/jboss-as.conf\"" }
+    - { regexp: '^(.*)JBOSS_CONF=(.*)$', line: "\\1JBOSS_CONF=\"{{ jboss_eap_instance_dir }}/service/jboss-eap.conf\"" }
     # Setting the correct jboss.server.base.dir
     - { regexp:  '(.*)JBOSS_SCRIPT=(.*)standalone.sh$', line: "\\1JBOSS_SCRIPT=\"\\2standalone.sh -Djboss.server.base.dir={{ jboss_eap_instance_dir }}\"" }
     # Specific to the reload mechanism of JBoss EAP 6 - Changing the "JBOSS_CONSOLE_LOG" to "JBOSS_SERVER_LOG" (prevents hanging at startup while the console log has been disabled)
@@ -56,12 +56,12 @@
     - { regexp: '^(.*)\$JBOSS_HOME/standalone/tmp/startup-marker(.*)$', line: "\\1{{ jboss_eap_instance_dir }}/tmp/startup-marker\\2" }
   register: conf_02
 
-- name: "{{ jboss_eap_instance_name }} {{ info }} Generate service jboss-as.conf"
+- name: "{{ jboss_eap_instance_name }} {{ info }} Generate service jboss-eap.conf"
   template:
     owner: "{{ jboss.user }}"
     group: "{{ jboss.group }}"
     src: jboss-as.conf.j2
-    dest: "{{ target_dir }}/service/jboss-as.conf"
+    dest: "{{ target_dir }}/service/jboss-eap.conf"
     mode: "0750"
   register: conf_03
 
@@ -130,7 +130,7 @@
   template:
     owner: "{{ jboss.user }}"
     group: "{{ jboss.group }}"
-    src: jboss-as-standalone.service.j2
+    src: jboss-eap-rhel.service.j2
     dest: "{{ target_dir }}/service/{{ jboss_eap_instance_service_name }}.service"
     mode: "0750"
   register: conf_08
