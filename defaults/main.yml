@@ -16,7 +16,6 @@ jboss_eap_instance_admin_groups:
 jboss:
   user: jboss
   group: jboss
-  group_id: 500
   user_home: "/opt/jboss"
 
 # Value for the xms and xmx (both are set equal)
