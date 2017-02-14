@@ -4,8 +4,8 @@ After=syslog.target network.target
 
 [Service]
 Type=forking
-ExecStart={{ jboss_eap_instance_dir }}/service/jboss-as-standalone.sh start
-ExecStop={{ jboss_eap_instance_dir }}/service/jboss-as-standalone.sh stop
+ExecStart={{ target_dir }}/service/jboss-eap-rhel.sh start
+ExecStop={{ target_dir }}/service/jboss-eap-rhel.sh stop
 TimeoutStartSec=300
 
 [Install]

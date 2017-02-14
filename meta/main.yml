@@ -21,5 +21,4 @@ galaxy_info:
 allow_duplicates: yes
 
 # Empty as otherwise the Galaxy import does not work as expected.
-dependencies:
-  - role: mm0.rh-jboss-common
+dependencies: []

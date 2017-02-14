@@ -1,0 +1,21 @@
+---
+- name: "Step 20. Copy service systemd unit file"
+  template:
+    owner: "{{ jboss.user }}"
+    group: "{{ jboss.group }}"
+    src: jboss-as-standalone.service.j2
+    dest: "/etc/systemd/system/{{ jboss_eap_instance_service_name }}.service"
+    mode: "0750"
+  register: conf_service
+
+# Reloading systemd. Should be executed here and not as a handler.
+- name: "Step 21. Reload systemd"
+  when: conf_service.changed
+  command: systemctl daemon-reload
+
+- name: "Step 22. Ensure JBoss EAP is running"
+  service:
+    name: "{{ jboss_eap_instance_service_name }}"
+    state: started
+    enabled: yes
+  become: yes
