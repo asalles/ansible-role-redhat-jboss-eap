@@ -13,8 +13,8 @@
   unarchive:
     src: "{{ jboss_eap_golden_image_dir }}/{{ jboss_eap_golden_image_name }}.zip"
     dest: "{{ jboss_eap_base_dir }}/{{ instance.name }}"
-    owner: "{{ jboss.user }}"
-    group: "{{ jboss.group }}"
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
     copy: false
     creates: yes
 

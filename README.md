@@ -74,7 +74,6 @@ Here is a playbook creating three JBoss EAP instances on every host in "jboss-gr
   - hosts: "jboss-group"
     vars:
     - golden_image_name: "jboss-eap-7.0.0"
-    - eap_version: "7.0"
     - instance:
       name: "dev1"
       port_offset: "10"

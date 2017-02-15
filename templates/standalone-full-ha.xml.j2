@@ -356,7 +356,7 @@
             </server>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:modcluster:2.0">
-            <mod-cluster-config advertise-socket="modcluster" proxies="{{ jboss_mod_cluster_proxies }}" advertise="false" connector="ajp">
+            <mod-cluster-config advertise-socket="modcluster" proxies="{{ jboss_outbound_socket_name }}" advertise="false" connector="ajp">
                 <dynamic-load-provider>
                     <load-metric type="cpu"/>
                 </dynamic-load-provider>
@@ -497,7 +497,7 @@
         <outbound-socket-binding name="mail-smtp">
             <remote-destination host="localhost" port="{{ jboss_eap_mail_smtp_port }}"/>
         </outbound-socket-binding>
-        <outbound-socket-binding name="mail-smtp">
+        <outbound-socket-binding name="{{ jboss_outbound_socket_name }}">
             <remote-destination host="{{ jboss_bind_address }}" port="{{ jboss_eap_outbound_proxy_port }}"/>
         </outbound-socket-binding>
     </socket-binding-group>

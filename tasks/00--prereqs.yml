@@ -36,11 +36,3 @@
   with_items:
     - "{{ jboss_app_users }}"
 
-- name: "STEP 4. Check zip file exists"
-  stat:
-    path: "{{ jboss_eap_golden_image_dir }}/{{ jboss_eap_golden_image_name }}.zip"
-  register: jboss_eap_exists
-
-- name: Fail when package unavailable
-  fail: "msg='Install archive not found path: {{ jboss_eap_golden_image_subdir }}/{{ jboss_eap_golden_image_name }}.zip'"
-  when: jboss_eap_exists.stat.exists == False

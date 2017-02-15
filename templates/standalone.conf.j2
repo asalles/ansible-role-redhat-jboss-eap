@@ -39,7 +39,7 @@ if [ "x$JBOSS_MODULES_SYSTEM_PKGS" = "x" ]; then
 fi
 
 ## Process user
-JBOSS_USER={{ jboss.user }}
+JBOSS_USER={{ jboss_app_users.user }}
 
 ## JBoss EAP home directory
 JBOSS_HOME={{ target_dir }}
@@ -62,13 +62,4 @@ JBOSS_CONFIG_DIR=$JBOSS_HOME/standalone/configuration
 
 JBOSS_MODE=standalone
 
-JAVA_OPTS="$JAVA_OPTS -Djava.net.preferIPv4Stack=true -Xms1224m -Xmx1224m -XX:PermSize=526m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dorg.jboss.resolver.warning=true -server -Dgw.server.mode=dev -D"gw.pc.serverid=jbosspc-{{ instance.name }}" -Djboss.node.name={{ instance.name }} -Djboss.as.management.blocking.timeout=1200 -Djboss.server.config.dir=$JBOSS_CONFIG_DIR"
-
-
-{#JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address={{ jboss_eap_bind_ip_address_public }}"#}
-{#JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.management={{ jboss_eap_bind_ip_address_management }}"#}
-{#JAVA_OPTS="$JAVA_OPTS -Djboss.socket.binding.port-offset={{ jboss_eap_instance_port_offset }}"#}
-{#JAVA_OPTS="$JAVA_OPTS -Djboss.node.name={{ ansible_hostname }}__{{ jboss_eap_instance_name }}"#}
-{#JAVA_OPTS="$JAVA_OPTS -Duser.timezone={{ timezone }} -Djboss.socket.binding.port-offset={{ jboss_eap_instance_port_offset }}"#}
-
-
+JAVA_OPTS="$JAVA_OPTS -Djava.net.preferIPv4Stack=true -Xms8224m -Xmx8224m -XX:PermSize=526m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dorg.jboss.resolver.warning=true -server -Dgw.server.mode=dev -D"gw.pc.serverid=jbosspc-{{ instance.name }}" -Djboss.node.name={{ instance.name }} -Djboss.as.management.blocking.timeout=1200 -Djboss.server.config.dir=$JBOSS_CONFIG_DIR"

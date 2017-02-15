@@ -24,10 +24,10 @@ jboss_eap_instance_standalone_file: standalone-full-ha.xml
 jboss_eap_instance_service_name: "jboss_{{ jboss_eap_instance_name }}"
 
 # System user configuration
-jboss:
-  user: jboss
-  group: jboss
-  user_home: "/opt/jboss"
+jboss_app_users:
+  user: jbossapp
+  group: jbossapp
+  user_home: "/home/jbossapp"
 
 # JBoss Management users [Set this in vault_files]
 jboss_management_users:
@@ -52,6 +52,7 @@ jboss_outbound_socket_name: "proxyjbossweb{{ jboss_eap_instance_name }}"
 jboss_eap_instance_port_offset: 0
 
 # Ports use in Standalone-full-ha.xml configuration files
+# Do we need to implement an offset setting like RH-JBOSS-HTTPD Role?
 jboss_eap_instance_cli_used_default_port: 9999
 jboss_eap_instance_management_http_port: 9990
 jboss_eap_instance_management_https_port: 9993
@@ -81,9 +82,5 @@ java_pkg_name: java-1.8.0-openjdk-devel
 # Timezone for the hosts and the logs
 timezone: America/Los_Angeles
 
-jboss_app_users:
-- user: jbossapp
-  group: jbossapp
-  user_home: "/home/jbossapp"
-
+# Default JAVA_HOME
 jboss_java_home: "/usr/lib/jvm/java-1.8.0-openjdk"

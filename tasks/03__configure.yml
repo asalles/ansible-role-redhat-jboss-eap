@@ -3,16 +3,16 @@
 
 - name: "Step 11. Copy instance specific standalone.conf"
   template:
-    owner: "{{ jboss.user }}"
-    group: "{{ jboss.group }}"
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
     src: "standalone.conf.j2"
     dest: "{{ target_dir }}/standalone/configuration/standalone.conf"
 
 - name: "Step 12. Create the service and deployments directory"
   file:
     path: "{{ item }}"
-    owner: "{{ jboss.user }}"
-    group: "{{ jboss.group }}"
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
     state: directory
     mode: "0750"
   with_items:
@@ -22,32 +22,32 @@
 
 - name: "Step 13. Copy instance specific standalone-full-ha.xml"
   template:
-    owner: "{{ jboss.user }}"
-    group: "{{ jboss.group }}"
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
     src: "standalone-full-ha.xml.j2"
     dest: "{{ target_dir }}/standalone/configuration/standalone-full-ha.xml"
 
 
 - name: "Step 14. jboss-eap-rhel.sh"
   template:
-    owner: "{{ jboss.user }}"
-    group: "{{ jboss.group }}"
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
     src: "jboss-eap-rhel.sh.j2"
     dest: "{{ target_dir }}/service/jboss-eap-rhel.sh"
     mode: "0750"
 
 - name: "Step 15. Generate service systemd unit file"
   template:
-    owner: "{{ jboss.user }}"
-    group: "{{ jboss.group }}"
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
     src: jboss-as-standalone.service.j2
     dest: "{{ target_dir }}/service/{{ jboss_eap_instance_service_name }}.service"
     mode: "0750"
 
 - name: "Step 16. Generate instance.info file"
   template:
-    owner: "{{ jboss.user }}"
-    group: "{{ jboss.group }}"
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
     src: instance.info.j2
     dest: "{{ target_dir }}/instance.info"
     mode: "0640"
@@ -60,9 +60,8 @@
   no_log: true
 
 - name: "Step 18. Update permissions"
-  file: path={{ item }} owner={{ jboss.user }} group={{ jboss.group }} state=directory recurse=yes mode="o-rx"
+  file: path={{ item }} owner={{ jboss_app_users.user }} group={{ jboss_app_users.group }} state=directory recurse=yes mode="o-rx"
   with_items:
-#    - "{{ jboss.user_home }}"
     - "{{ target_dir }}"
 
 - name: "Step 19. Update ACL"
