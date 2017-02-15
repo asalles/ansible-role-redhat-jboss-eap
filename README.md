@@ -70,16 +70,27 @@ Example Playbook
 
 Here is a playbook creating three JBoss EAP instances on every host in "jboss-group":
 
-    - hosts: "jboss-group"
-      roles:
-        # JBoss EAP 7 instance for the ticket-monster application
-        - {
-            role: "mm0.rh-jboss-eap",
-            jboss_eap_golden_image_name: "jboss-eap-6.4.8_GI",
-            jboss_eap_instance_name: "ticket_monster",
-            jboss_eap_instance_standalone_file: "standalone-full-ha.xml",
-            jboss_eap_instance_port_offset: 0,
-        }
+```yaml
+  - hosts: "jboss-group"
+    vars:
+    - golden_image_name: "jboss-eap-7.0.0"
+    - eap_version: "7.0"
+    - instance:
+      name: "dev1"
+      port_offset: "10"
+    - ip_address: "{{ ansible_ens160.ipv4.address }}"
+    vars_files:
+    - vault_files/jboss_management.yml
+    roles:
+    - {
+        role: "mm0.rh-jboss-eap",
+        jboss_eap_instance_name: "{{ instance.name }}",
+        jboss_eap_instance_port_offset: "{{ instance.port_offset }}",
+        jboss_bind_address: "{{ ip_address }}",
+        jboss_eap_bind_ip_address_public: "{{ ip_address }}",
+        jboss_eap_bind_ip_address_management: "{{ ip_address }}"
+      }
+```
 
 
 Structure

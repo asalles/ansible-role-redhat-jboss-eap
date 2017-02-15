@@ -65,5 +65,5 @@
 #    - "{{ jboss.user_home }}"
     - "{{ target_dir }}"
 
-- name: "Step 12=9. Update ACL"
+- name: "Step 19. Update ACL"
   acl: name={{ target_dir }} etype=other state=present permissions='---' default=true recursive=true

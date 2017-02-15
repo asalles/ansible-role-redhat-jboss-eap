@@ -44,6 +44,10 @@ jboss_eap_bind_ip_address_public: "0.0.0.0"
 # Value for the xms and xmx (both are set equal)
 jvm_xm: 512
 
+jboss_eap_max_post_size: 157286400
+jboss_mod_cluster_proxies: "proxyjbosswebcltl_{{ jboss_eap_instance_name }}"
+jboss_outbound_socket_name: "proxyjbossweb{{ jboss_eap_instance_name }}"
+
 # Port offset for the JBoss EAP instance
 jboss_eap_instance_port_offset: 0
 
@@ -69,7 +73,7 @@ jboss_eap_jgroups_multicast_tcp_port: 45700
 jboss_eap_jgroups_multicast_udp_port: 45688
 jboss_eap_modcluster_multicast_port: 23364
 jboss_eap_modcluster_multicast_address: 224.0.1.105
-
+jboss_eap_outbound_proxy_port: 6666
 
 # Used java version: Java 8 JDK. See recommendation https://access.redhat.com/solutions/18259
 java_pkg_name: java-1.8.0-openjdk-devel
