@@ -36,3 +36,12 @@
   with_items:
     - "{{ jboss_app_users }}"
 
+- name: Set user limits
+  pam_limits:
+    domain: "{{ item.domain }}"
+    limit_type: "{{ item.type }}"
+    limit_item: "{{ item.item }}"
+    value: "{{ item.value }}"
+    use_max: yes
+  with_items: "{{ user_limits }}"
+  become: yes
