@@ -65,4 +65,17 @@
     - "{{ target_dir }}"
 
 - name: "Step 19. Update ACL"
-  acl: name={{ target_dir }} etype=other state=present permissions='---' default=true recursive=true
+  acl:
+    name: "{{ target_dir }}"
+    etype: "{{ item.type }}"
+    state: present
+    permissions: '{{ item.permissions }}'
+    default: true
+    recursive: true
+  with_items:
+  - type: user
+    permissions: rw-
+  - type: group
+    permissions: r--
+  - type: other
+    permissions: r--

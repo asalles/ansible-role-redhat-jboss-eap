@@ -113,3 +113,4 @@ user_limits:
   item: "nofile"
   value: "102400"
 
+jboss_eap_war_files: []
