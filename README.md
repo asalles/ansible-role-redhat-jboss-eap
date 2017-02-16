@@ -38,31 +38,72 @@ Installation
 Role Variables
 --------------
 
+
+
+
+
+
+
+
+: []
+
 *General variables*
 
 | Name              | Default Value       | Description          |
 |-------------------|---------------------|----------------------|
-| `download_dir` | `/tmp` | Directory containing all required middleware binaries on the managed remote host. Mandatory |
-| `jboss.user` | `jboss` | Linux user name used for running EAP |
-| `jboss.group` | `jboss` | Linux group name used for the `jboss.user` |
-| `jboss.group_id` | `500` | Linux group id taken for `jboss.group` |
-| `jboss.user_home` | `/opt/jboss` | Linux home directory for `jboss.user`  |
+| `timezone` | `America/Los_Angeles` | Self Explanatory |
+| `jboss_eap_golden_image_dir` | `/mnt/nfs/ansible/redhat/rh_jboss_golden_images` | Directory location of golden image zip |
+| `jboss_eap_golden_image_subdir` | `jboss-eap-7.0` | Directory name of root directory inside zip |
+| `jboss_eap_golden_image_name` | `jboss-eap-7.0.0` | The name of the zip file (excluding .zip)|
+| `jboss_serverid` | `jbosspc-{{ instance.name }}` |  Serverid |
+| `jboss_eap_base_dir` | `/jboss` |  Base Directory for EAP Installation |
+| `jboss_eap_instance_name` | `default` |  Name of the separate running Red Hat JBoss EAP instance |
+| `jboss_eap_instance_standalone_file` | `standalone-full-ha.xml` | Name of the used standalone XML file |
+| `jboss_eap_instance_service_name` | `jboss_{{ jboss_eap_instance_name }}` | JBoss EAP service name|
+| jboss_app_users:<br>     user: jbossapp<br>  group: jbossapp<br>  user_home: "/home/jbossapp" | | System user configuration |
+| jboss_management_users:<br> - user: test<br> password: test<br> - user: test<br> password: test| | JBoss Management users [Set this in vault_files] |
+| `jboss_bind_address` | `"0.0.0.0"` | JBoss EAP IP Address to bind to |
+| `jboss_eap_bind_ip_address_management` | `"0.0.0.0"` | JBoss EAP IP Address to bind to for management |
+| `jvm_xm` | `512` | alue for the xms and xmx (both are set equal) |
+| `jboss_eap_max_post_size` | `157286400` | Max POST Size|
+| `jboss_mod_cluster_proxies` | `proxyjbossweb{{ jboss_eap_instance_name }}` | Mod_cluster proxies name |
+| `jboss_outbound_socket_name` | `proxyjbossweb{{ jboss_eap_instance_name }}` | Outbound socket name |
+| jboss_management_users: <br> - user: admin1 <br>   password: "12345#%" <br> - user: admin2 <br>   password: "123456" | | List of administrator user accounts and passwords to configure |
+| `java_pkg_name` | `java-1.8.0-openjdk-devel` | Used java version: Java 8 JDK.  |
+| `jboss_java_home` | `/usr/lib/jvm/java-1.8.0-openjdk` | Default JAVA_HOME |
+| `JAVA_OPTS` |  `-Djava.net.preferIPv4Stack=true -Xms8224m -Xmx8224m -XX:PermSize=526m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dorg.jboss.resolver.warning=true -server -Dgw.server.mode=dev -Djboss.as.management.blocking.timeout=1200` | Java params |
+| `jboss_eap_jgroups_multicast_address` | `230.0.0.4` | Default Address  |
+| `jboss_eap_modcluster_multicast_address` | `224.0.1.105` | Default Address |
+| `user_limits` | `See Defaults/main.yml` | Default User Limits |
+| `jboss_eap_war_files` | `[ /path/to/war.war, /path/to/war2/war` | (Empty )List with paths to War files to be installed |
+| `jboss_datasource` | `See Defaults/main.yml` | Datasource  |
+| `jboss_jndi_name` | `java:jboss/datasources/pcDataSource` | JNDI Name |
+| `jboss_jdbc_driver` | `See Defaults/main.yml` | JDBC Configuration |
 
-
-*Instance specific variables*
+*Ports Variables*
 
 | Name              | Default Value       | Description          |
 |-------------------|---------------------|----------------------|
-| `jboss_eap_instance_name` | `default` | Name of the separate running Red Hat JBoss EAP instance. Mandatory |
-| `jboss_eap_instance_admin_user` | `redhat` | Red Hat JBoss EAP admin user name. Mandatory |
-| `jboss_eap_instance_admin_password` | `ba2caa9378fa898f1dea88804abe52b4` | Red Hat JBoss EAP admin password ("redhat123!") hashed according to HEX( MD5( username ':' realm ':' password)). Mandatory |
-| `jboss_eap_instance_admin_groups` | empty | Red Hat JBoss EAP admin user groups |
-| `jboss_eap_golden_image_name` | empty | Name of the used Red Hat JBoss EAP golden image. Mandatory |
-| `jvm_xm` | `512` | Value for the xms and xmx (both are set equal) in MB  |
 | `jboss_eap_instance_port_offset` | `0` | Port offset for the JBoss EAP instance  |
-| `jboss_eap_instance_cli_used_default_port` | `9999` | Default port for the native management interface |
-| `jboss_eap_instance_cli_default_port` | `8888` | Port used only during updates using the CLI (port should be available) |
-| `jboss_eap_instance_standalone_file` | `standalone.xml` | Name of the used standalone XML file |
+| `jboss_eap_instance_management_http_port` | `9990` | Default Management Port |
+| `jboss_eap_instance_management_https_port` | `9993` | Default Management SSL Port |
+| `jboss_eap_instance_ajp_port` | `8009` | AJP Port |
+| `jboss_eap_instance_http_port` | `8080` | HTTP Port |
+| `jboss_eap_instance_https_port` | `8443` | HTTPS Port |
+| `jboss_eap_instance_iiop_port` | `3528` | IIOP Port |
+| `jboss_eap_instance_iiop__ssl_port` | `3529` | IIOP SSL Port |
+| `jboss_eap_jgroups_mping_port` | `7600` | JGroups Ping port |
+| `jboss_eap_jgroups_tcp_port` | `7600` | Port |
+| `jboss_eap_jgroups_tcp_fd_port` | `57600` | Port |
+| `jboss_eap_jgroups_udp_port` | `55200` | Port |
+| `jboss_eap_jgroups_udp_fd_port` | `54200` | Port |
+| `jboss_eap_txn_recovery_environment_port` | `4712` | Port |
+| `jboss_eap_txn_status_manager_port` | `4713` | Port |
+| `jboss_eap_mail_smtp_port` | `25` | Port |
+| `jboss_eap_jgroups_multicast_tcp_port` | `45700` | Port |
+| `jboss_eap_jgroups_multicast_udp_port` | `45688` | Port |
+| `jboss_eap_modcluster_multicast_port` | `23364` | Port |
+| `jboss_eap_outbound_proxy_port` | `6666` | Port |
 
 
 Example Playbook
@@ -73,7 +114,6 @@ Here is a playbook creating three JBoss EAP instances on every host in "jboss-gr
 ```yaml
   - hosts: "jboss-group"
     vars:
-    - golden_image_name: "jboss-eap-7.0.0"
     - instance:
       name: "dev1"
       port_offset: "10"
@@ -86,7 +126,6 @@ Here is a playbook creating three JBoss EAP instances on every host in "jboss-gr
         jboss_eap_instance_name: "{{ instance.name }}",
         jboss_eap_instance_port_offset: "{{ instance.port_offset }}",
         jboss_bind_address: "{{ ip_address }}",
-        jboss_eap_bind_ip_address_public: "{{ ip_address }}",
         jboss_eap_bind_ip_address_management: "{{ ip_address }}"
       }
 ```

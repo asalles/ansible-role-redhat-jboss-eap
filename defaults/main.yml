@@ -40,7 +40,6 @@ jboss_management_users:
 # Addresses to bind to
 jboss_bind_address: "0.0.0.0"
 jboss_eap_bind_ip_address_management: "0.0.0.0"
-jboss_eap_bind_ip_address_public: "0.0.0.0"
 
 # Value for the xms and xmx (both are set equal)
 jvm_xm: 512
@@ -52,7 +51,6 @@ jboss_outbound_socket_name: "proxyjbossweb{{ jboss_eap_instance_name }}"
 jboss_eap_instance_port_offset: 0
 
 # Ports use in Standalone-full-ha.xml configuration files
-# Do we need to implement an offset setting like RH-JBOSS-HTTPD Role?
 jboss_eap_instance_cli_used_default_port: 9999
 jboss_eap_instance_management_http_port: 9990
 jboss_eap_instance_management_https_port: 9993
@@ -113,4 +111,26 @@ user_limits:
   item: "nofile"
   value: "102400"
 
+# Deployments
 jboss_eap_war_files: []
+
+# Datasource
+jboss_datasource:
+  name: pcDataSource
+  min_pool_size: 10
+  initial_pool_size: 10
+  max_pool_size: 150
+
+ # JDBC
+jboss_jndi_name: "java:jboss/datasources/pcDataSource"
+jboss_jdbc_driver:
+  name: sqljdbc-4.1.jar
+  module_name: com.microsoft
+  driver_class: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  major_version: 0
+  minor_version: 0
+  connection_url: "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=Database1"
+  username: devapp
+  password: password1234
+  connection_properties:
+  - sendStringParametersAsUnicode: false
