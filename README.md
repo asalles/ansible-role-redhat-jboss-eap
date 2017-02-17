@@ -38,15 +38,6 @@ Installation
 Role Variables
 --------------
 
-
-
-
-
-
-
-
-: []
-
 *General variables*
 
 | Name              | Default Value       | Description          |
