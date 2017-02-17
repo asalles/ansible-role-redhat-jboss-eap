@@ -122,6 +122,25 @@ Here is a playbook creating three JBoss EAP instances on every host in "jboss-gr
 ```
 
 
+vault_files/informatica.yml should contain the following structure:
+```yaml
+jboss_management_users:
+- user: admin1
+  password: "adminpassword"
+- user: admin2
+  password: "adminpass"
+jboss_jdbc_driver:
+  name: sqljdbc-4.1.jar
+  module_name: com.microsoft
+  driver_class: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  major_version: 0
+  minor_version: 0
+  connection_url: "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=DBA1"
+  username: user
+  password: password
+```
+
+
 Structure
 ---------
 - Redhat-jboss-common role creates and configures jbossapp user, group and home directory for the JBoss instance.
@@ -144,6 +163,11 @@ License
 Author Information
 ------------------
 
+Original Credit to:
 * [Marc Zottner](https://github.com/Maarc)
 * [Roeland van de Pol](https://github.com/roelandpol)
+
+Updated by
+
+* Tommy
 * [Matt Margolin](https://github.com/mm0)
