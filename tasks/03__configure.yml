@@ -75,8 +75,8 @@
   become: yes
   with_items:
   - type: user
-    permissions: rw-
+    permissions: rwx
   - type: group
-    permissions: r--
+    permissions: rwx
   - type: other
     permissions: r--
