@@ -82,10 +82,21 @@
   with_items: "{{ user_limits }}"
   become: yes
 
-
-- name: "Install JDK 1.8 And dependencies"
-  become: true
-  yum: name="{{ item }}" state=present
+- name: "Create java directory"
+  file:
+    path: "{{ item }}"
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
+    state: directory
+    mode: "0750"
   with_items:
-  - unzip
-  - "{{ java_pkg_name }}"
+  - "{{ jboss_eap_base_dir }}/java"
+
+- name: "Create JDK Symlink"
+  become: true
+  file:
+    state: link
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
+    src: "{{ jboss_java_home }}"
+    dest: "{{ jboss_eap_base_dir }}/java/{{ jboss_java_sdk_dir }}"
