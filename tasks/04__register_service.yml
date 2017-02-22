@@ -28,7 +28,7 @@
       --password='{{ jboss_management_users[0].password }}' \
       --command='deploy {{ item }}'"
   args:
-    chdir: "{{ target_dir }}"
+    chdir: "{{ jboss_eap_base_dir }}/{{ jboss_eap_instance_name }}/{{ jboss_eap_golden_image_subdir }}"
   when: jboss_eap_war_files|length > 0
   with_items: "{{ jboss_eap_war_files }}"
   no_log: yes
