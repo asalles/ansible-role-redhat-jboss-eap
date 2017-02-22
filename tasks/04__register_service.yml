@@ -16,20 +16,21 @@
 - name: "Step 22. Ensure JBoss EAP is running"
   service:
     name: "{{ jboss_eap_instance_service_name }}"
-    state: started
+    state: restarted
     enabled: yes
   become: yes
 
 - name: "Step 23. Install War file"
   shell:  "./bin/jboss-cli.sh \
-      --controller={{ jboss_bind_address }}:{{ jboss_eap_instance_management_http_port|int +  jboss_eap_instance_port_offset|int}} \
+      --controller={{ jboss_eap_bind_address }}:{{ jboss_eap_instance_management_http_port|int +  jboss_eap_instance_port_offset|int}} \
       --connect \
       --user={{ jboss_management_users[0].user }} \
-      --password={{ jboss_management_users[0].password }} \
+      --password='{{ jboss_management_users[0].password }}' \
       --command='deploy {{ item }}'"
   args:
     chdir: "{{ target_dir }}"
   when: jboss_eap_war_files|length > 0
   with_items: "{{ jboss_eap_war_files }}"
+  no_log: yes
   tags:
   - install_war_file

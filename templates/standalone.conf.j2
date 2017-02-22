@@ -63,5 +63,5 @@ JBOSS_CONFIG_DIR=$JBOSS_HOME/standalone/configuration
 JBOSS_MODE=standalone
 
 JAVA_OPTS="$JAVA_OPTS {{ JAVA_OPTS}}"
-JAVA_OPTS="$JAVA_OPTS -Djboss.server.config.dir=$JBOSS_CONFIG_DIR  -Djboss.node.name={{ instance.name }}"
+JAVA_OPTS="$JAVA_OPTS -Djboss.server.config.dir=$JBOSS_CONFIG_DIR  -Djboss.node.name={{ jboss_eap_instance_name }}"
 JAVA_OPTS="$JAVA_OPTS  -D'gw.pc.serverid={{ jboss_serverid }}'"

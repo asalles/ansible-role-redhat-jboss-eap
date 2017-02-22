@@ -51,7 +51,7 @@ if [ -z "$SHUTDOWN_WAIT" ]; then
 fi
 
 if [ -z "$JBOSS_LOCKFILE" ]; then
-	JBOSS_LOCKFILE=/var/lock/jboss-eap-{{ instance.name }}
+	JBOSS_LOCKFILE=/var/lock/jboss-eap-{{ jboss_eap_instance_name }}
 fi
 
 # Startup mode of jboss-eap

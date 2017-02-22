@@ -453,7 +453,7 @@
             </filters>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:2.0">
-            <wsdl-host>${jboss.bind.address:{{ jboss_bind_address }}}</wsdl-host>
+            <wsdl-host>${jboss.bind.address:{{ jboss_eap_bind_address }}}</wsdl-host>
             <endpoint-config name="Standard-Endpoint-Config"/>
             <endpoint-config name="Recording-Endpoint-Config">
                 <pre-handler-chain name="recording-handlers" protocol-bindings="##SOAP11_HTTP ##SOAP11_HTTP_MTOM ##SOAP12_HTTP ##SOAP12_HTTP_MTOM">
@@ -466,16 +466,16 @@
     </profile>
     <interfaces>
         <interface name="management">
-            <inet-address value="${jboss.bind.address.management:{{ jboss_bind_address }}}"/>
+            <inet-address value="${jboss.bind.address.management:{{ jboss_eap_bind_address }}}"/>
         </interface>
         <interface name="public">
-            <inet-address value="${jboss.bind.address:{{ jboss_bind_address }}}"/>
+            <inet-address value="${jboss.bind.address:{{ jboss_eap_bind_address }}}"/>
         </interface>
         <interface name="private">
-            <inet-address value="${jboss.bind.address.private:{{ jboss_bind_address }}}"/>
+            <inet-address value="${jboss.bind.address.private:{{ jboss_eap_bind_address }}}"/>
         </interface>
         <interface name="unsecure">
-            <inet-address value="${jboss.bind.address.unsecure:{{ jboss_bind_address }}}"/>
+            <inet-address value="${jboss.bind.address.unsecure:{{ jboss_eap_bind_address }}}"/>
         </interface>
     </interfaces>
     <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:{{  jboss_eap_instance_port_offset }}}">
@@ -498,7 +498,7 @@
             <remote-destination host="localhost" port="{{ jboss_eap_mail_smtp_port }}"/>
         </outbound-socket-binding>
         <outbound-socket-binding name="{{ jboss_outbound_socket_name }}">
-            <remote-destination host="{{ jboss_bind_address }}" port="{{ jboss_eap_outbound_proxy_port }}"/>
+            <remote-destination host="{{ jboss_eap_bind_address }}" port="{{ jboss_eap_outbound_proxy_port }}"/>
         </outbound-socket-binding>
     </socket-binding-group>
 </server>

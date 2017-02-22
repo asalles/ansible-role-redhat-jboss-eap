@@ -1,5 +1,5 @@
 ---
-timezone: "America/Los_Angeles"
+jboss_eap_force_remove: false
 
 # Directory location of golden image zip
 jboss_eap_golden_image_dir: "/mnt/nfs/ansible/redhat/rh_jboss_golden_images"
@@ -7,16 +7,18 @@ jboss_eap_golden_image_dir: "/mnt/nfs/ansible/redhat/rh_jboss_golden_images"
 # Directory name of root directory inside zip
 jboss_eap_golden_image_subdir: "jboss-eap-7.0"
 
-jboss_serverid: jbosspc-{{ instance.name }}
+# Name of the separate running Red Hat JBoss EAP instance
+jboss_eap_instance_name: default
+
+# Used in JAVA_OPTS
+jboss_serverid: jbosspc-{{ jboss_eap_instance_name }}
+
 # Name of zip file (excluding .zip)
 # Also the name of the Directory we want to rename to
 jboss_eap_golden_image_name: "jboss-eap-7.0.0"
 
 # Base Directory for EAP
 jboss_eap_base_dir: "/jboss"
-
-# Name of the separate running Red Hat JBoss EAP instance
-jboss_eap_instance_name: default
 
 # Name of the used standalone XML file
 jboss_eap_instance_standalone_file: standalone-full-ha.xml
@@ -38,8 +40,8 @@ jboss_management_users:
   password: test
 
 # Addresses to bind to
-jboss_bind_address: "0.0.0.0"
-jboss_eap_bind_ip_address_management: "0.0.0.0"
+jboss_eap_bind_address: "127.0.0.1"
+jboss_eap_bind_ip_address_management: "127.0.0.1"
 
 # Value for the xms and xmx (both are set equal)
 jvm_xm: 512
@@ -120,17 +122,3 @@ jboss_datasource:
   min_pool_size: 10
   initial_pool_size: 10
   max_pool_size: 150
-
- # JDBC
-jboss_jndi_name: "java:jboss/datasources/pcDataSource"
-jboss_jdbc_driver:
-  name: sqljdbc-4.1.jar
-  module_name: com.microsoft
-  driver_class: com.microsoft.sqlserver.jdbc.SQLServerDriver
-  major_version: 0
-  minor_version: 0
-  connection_url: "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=Database1"
-  username: devapp
-  password: password1234
-  connection_properties:
-  - sendStringParametersAsUnicode: false

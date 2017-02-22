@@ -1,0 +1,91 @@
+- name: "Check existence of the init.d script"
+  stat:
+    path: "/etc/systemd/system/{{ jboss_eap_instance_service_name }}.service"
+  register: jboss_eap_rhel_sh
+
+- name: "Stop JBoss EAP if already running"
+  when: jboss_eap_rhel_sh.stat.exists
+  service:
+    name: "{{ jboss_eap_instance_service_name }}"
+    state: stopped
+
+- name: Ensure ports aren't currently being used
+  wait_for:
+    port: "{{ item }}"
+    host: "{{ jboss_eap_bind_address }}"
+    state: stopped
+    delay: 0
+    timeout: 1
+  with_items:
+  - "{{ jboss_eap_instance_cli_used_default_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_instance_management_http_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_instance_management_https_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_instance_ajp_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_instance_http_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_instance_https_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_instance_iiop_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_instance_iiop_ssl_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_jgroups_tcp_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_jgroups_tcp_fd_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_txn_recovery_environment_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_txn_status_manager_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_mail_smtp_port }}"
+  - "{{ jboss_eap_jgroups_multicast_tcp_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_modcluster_multicast_port + jboss_eap_instance_port_offset|int }}"
+  - "{{ jboss_eap_outbound_proxy_port + jboss_eap_instance_port_offset|int }}"
+
+- name: "Step 1a. Create groups for App"
+  group:
+    name: "{{ item.group }}"
+    system: yes
+    state: present
+  with_items:
+    - "{{ jboss_app_users }}"
+  become: yes
+
+- name: "Step 1b. Create users for App"
+  user:
+    name: "{{ item.user }}"
+    comment: "{{ item.user }} user"
+    group: "{{ item.group }}"
+    home: "{{ item.user_home }}"
+    shell: "/bin/bash"
+  become: yes
+  with_items:
+    - "{{ jboss_app_users }}"
+
+- name: "Step 2. Install JDK 1.8"
+  become: true
+  yum: name={{ item }} state=present
+  with_items:
+   - unzip
+   - "{{ java_pkg_name }}"
+
+- name: "Step 3. Update .bash_profile"
+  template:
+    src: .bash_profile.j2
+    dest: "{{ item.user_home }}/.bash_profile"
+    owner: "{{ item.user }}"
+    group: "{{ item.group }}"
+  register: bashrc_uploaded
+  become: true
+  with_items:
+    - "{{ jboss_app_users }}"
+
+- name: Set user limits
+  pam_limits:
+    domain: "{{ item.domain }}"
+    limit_type: "{{ item.type }}"
+    limit_item: "{{ item.item }}"
+    value: "{{ item.value }}"
+    use_max: yes
+  with_items: "{{ user_limits }}"
+  become: yes
+
+
+- name: "Install JDK 1.8 And dependencies"
+  become: true
+  yum: name="{{ item }}" state=present
+  with_items:
+  - unzip
+  - "{{ java_pkg_name }}"

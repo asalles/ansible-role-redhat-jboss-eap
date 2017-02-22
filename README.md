@@ -46,14 +46,14 @@ Role Variables
 | `jboss_eap_golden_image_dir` | `/mnt/nfs/ansible/redhat/rh_jboss_golden_images` | Directory location of golden image zip |
 | `jboss_eap_golden_image_subdir` | `jboss-eap-7.0` | Directory name of root directory inside zip |
 | `jboss_eap_golden_image_name` | `jboss-eap-7.0.0` | The name of the zip file (excluding .zip)|
-| `jboss_serverid` | `jbosspc-{{ instance.name }}` |  Serverid |
+| `jboss_serverid` | `jbosspc-{{ jboss_eap_instance_name }}` |  Serverid |
 | `jboss_eap_base_dir` | `/jboss` |  Base Directory for EAP Installation |
 | `jboss_eap_instance_name` | `default` |  Name of the separate running Red Hat JBoss EAP instance |
 | `jboss_eap_instance_standalone_file` | `standalone-full-ha.xml` | Name of the used standalone XML file |
 | `jboss_eap_instance_service_name` | `jboss_{{ jboss_eap_instance_name }}` | JBoss EAP service name|
 | jboss_app_users:<br>     user: jbossapp<br>  group: jbossapp<br>  user_home: "/home/jbossapp" | | System user configuration |
 | jboss_management_users:<br> - user: test<br> password: test<br> - user: test<br> password: test| | JBoss Management users [Set this in vault_files] |
-| `jboss_bind_address` | `"0.0.0.0"` | JBoss EAP IP Address to bind to |
+| `jboss_eap_bind_address` | `"127.0.0.1"` | JBoss EAP IP Address to bind to (0.0.0.0 *DOES NOT WORK* |
 | `jboss_eap_bind_ip_address_management` | `"0.0.0.0"` | JBoss EAP IP Address to bind to for management |
 | `jvm_xm` | `512` | alue for the xms and xmx (both are set equal) |
 | `jboss_eap_max_post_size` | `157286400` | Max POST Size|
@@ -70,6 +70,7 @@ Role Variables
 | `jboss_datasource` | `See Defaults/main.yml` | Datasource  |
 | `jboss_jndi_name` | `java:jboss/datasources/pcDataSource` | JNDI Name |
 | `jboss_jdbc_driver` | `See Defaults/main.yml` | JDBC Configuration |
+| `jboss_eap_force_remove` | `False` | Change this to true to remove the current installation for the environment|
 
 *Ports Variables*
 
@@ -116,28 +117,19 @@ Here is a playbook creating three JBoss EAP instances on every host in "jboss-gr
         role: "mm0.rh-jboss-eap",
         jboss_eap_instance_name: "{{ instance.name }}",
         jboss_eap_instance_port_offset: "{{ instance.port_offset }}",
-        jboss_bind_address: "{{ ip_address }}",
+        jboss_eap_bind_address: "{{ ip_address }}",
         jboss_eap_bind_ip_address_management: "{{ ip_address }}"
       }
 ```
 
 
-vault_files/informatica.yml should contain the following structure:
+vault_files/jboss_management.yml should contain the following structure:
 ```yaml
 jboss_management_users:
 - user: admin1
   password: "adminpassword"
 - user: admin2
   password: "adminpass"
-jboss_jdbc_driver:
-  name: sqljdbc-4.1.jar
-  module_name: com.microsoft
-  driver_class: com.microsoft.sqlserver.jdbc.SQLServerDriver
-  major_version: 0
-  minor_version: 0
-  connection_url: "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=DBA1"
-  username: user
-  password: password
 ```
 
 
