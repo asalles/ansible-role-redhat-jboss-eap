@@ -1,5 +1,5 @@
-mm0.rh-jboss-common 
-===
+mm0.rh-jboss-eap
+================
 
 [![Build Status](https://travis-ci.org/mm0/ansible-role-redhat-jboss-eap.svg?branch=master)](https://travis-ci.org/mm0/ansible-role-redhat-jboss-eap) [![Galaxy](https://img.shields.io/badge/galaxy-mmo.rh--jboss--eap-blue.svg?style=flat)](https://galaxy.ansible.com/mm0/rh-jboss-eap)
 
@@ -22,6 +22,16 @@ Requirements
 ------------
 
 This role has been tested on Ansible 2.0.2.0 and 2.1.1.0. It requires Red Hat Enterprise Linux 7.
+
+* RHEL 7+
+* Accessible License Key File Path (`informatica.key_file`)
+* Port Offset (`jboss_eap_instance_port_offset`)
+* Environment Name of your choosing (`environment_name`,`jboss_eap_instance_name`)
+* (optional) Java options, (`JAVA_OPTS`)
+* Timezone (`timezone`)
+* List of path to WARs to deploy(`jboss_eap_war_files`)
+* Interfaces to bind to ( Defaults to `jboss_eap_bind_address: "0.0.0.0"`, `jboss_eap_management_bind_address`")
+
 
 
 Dependencies
