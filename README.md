@@ -15,8 +15,6 @@ Core implemented features in this role:
 - multiple Red Hat JBoss EAP instances per host
 - graceful orchestration and shutdown (prerequisite for rolling updates)
 
-Please have a look at [this example](https://github.com/mm0/ansible_middleware_soe) showing how to easily operate Red Hat JBoss middleware products using this role.
-
 
 Requirements
 ------------
@@ -24,7 +22,6 @@ Requirements
 This role has been tested on Ansible 2.0.2.0 and 2.1.1.0. It requires Red Hat Enterprise Linux 7.
 
 * RHEL 7+
-* Accessible License Key File Path (`informatica.key_file`)
 * Port Offset (`jboss_eap_instance_port_offset`)
 * Environment Name of your choosing (`environment_name`,`jboss_eap_instance_name`)
 * (optional) Java options, (`JAVA_OPTS`)
@@ -32,6 +29,12 @@ This role has been tested on Ansible 2.0.2.0 and 2.1.1.0. It requires Red Hat En
 * List of path to WARs to deploy(`jboss_eap_war_files`)
 * Interfaces to bind to ( Defaults to `jboss_eap_bind_address: "0.0.0.0"`, `jboss_eap_management_bind_address`")
 
+*The following files must be present on server:*
+
+| Ansible Variable(s)  | Default Value       | Description          |
+|-------------------|---------------------|----------------------|
+| `jboss_eap_golden_image_dir` | `/mnt/nfs/ansible/redhat/rh_jboss_golden_images/` | Directory of zip |
+| `jboss_eap_golden_image_name` | `jboss-eap-7.0.0` | Base name of zip file (without .zip extension) |
 
 
 Dependencies
@@ -43,6 +46,8 @@ Installation
 ------------
 
     ansible-galaxy install mm0.rh-jboss-eap -p roles
+
+It is suggested to use a `requirements.yml` file within your project using ansible-galaxy
 
 
 Role Variables
@@ -76,7 +81,7 @@ Role Variables
 | `jboss_eap_jgroups_multicast_address` | `230.0.0.4` | Default Address  |
 | `jboss_eap_modcluster_multicast_address` | `224.0.1.105` | Default Address |
 | `user_limits` | `See Defaults/main.yml` | Default User Limits |
-| `jboss_eap_war_files` | `[ /path/to/war.war, /path/to/war2/war` | (Empty )List with paths to War files to be installed |
+| `jboss_eap_war_files` | `[ /path/to/war.war, /path/to/war2/war ]` | (Empty )List with paths to War files to be installed |
 | `jboss_datasource` | `See Defaults/main.yml` | Datasource  |
 | `jboss_jndi_name` | `java:jboss/datasources/pcDataSource` | JNDI Name |
 | `jboss_jdbc_driver` | `See Defaults/main.yml` | JDBC Configuration |
@@ -116,19 +121,22 @@ Here is a playbook creating three JBoss EAP instances on every host in "jboss-gr
 ```yaml
   - hosts: "jboss-group"
     vars:
-    - instance:
-      name: "dev1"
-      port_offset: "10"
-    - ip_address: "{{ ansible_ens160.ipv4.address }}"
+      environment_name: "Dev3"
+      jboss_eap_instance_name: "{{ environment_name }}"
+      jboss_eap_instance_port_offset: 10
+      JAVA_OPTS: "-Djava.net.preferIPv4Stack=true \
+      -Xms524m -Xmx524m -XX:PermSize=526m -Dsun.rmi.dgc.client.gcInterval=3600000 \
+      -Dsun.rmi.dgc.server.gcInterval=3600000 -Dorg.jboss.resolver.warning=true -server \
+      -Dgw.server.mode=dev -Djboss.as.management.blocking.timeout=1200"
+      jboss_eap_war_files:
+      - /mnt/nfs/ansible/billing-hub/ojdbc7.jar
+      jboss_eap_bind_address: "{{ ansible_ens160.ipv4.address }}"
+      jboss_eap_management_bind_address: "{{ ansible_ens160.ipv4.address }}"
     vars_files:
     - vault_files/jboss_management.yml
     roles:
     - {
-        role: "mm0.rh-jboss-eap",
-        jboss_eap_instance_name: "{{ instance.name }}",
-        jboss_eap_instance_port_offset: "{{ instance.port_offset }}",
-        jboss_eap_bind_address: "{{ ip_address }}",
-        jboss_eap_bind_ip_address_management: "{{ ip_address }}"
+        role: "mm0.rh-jboss-eap"
       }
 ```
 
