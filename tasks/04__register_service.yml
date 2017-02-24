@@ -19,6 +19,8 @@
     state: restarted
     enabled: yes
   become: yes
+  tags:
+  - start_eap
 
 - name: "Step 23. Install War file"
   shell:  "./bin/jboss-cli.sh \

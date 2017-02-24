@@ -150,8 +150,18 @@ jboss_management_users:
   password: "adminpass"
 ```
 
-Deploying WAR(s)
-----------------
+Tags
+----
+##### Stopping EAP Service
+```bash
+ansible-playbook deploy-jboss-eap.yml -e 'target=rh72'  -t stop_eap
+```
+##### (Re)starting EAP Service
+```bash
+ansible-playbook deploy-jboss-eap.yml -e 'target=rh72'  -t start_eap
+```
+
+##### Deploying WAR(s)
 ```bash
 ansible-playbook deploy-jboss-eap.yml -e 'target=rh72'  -e "{ 'jboss_eap_war_files': [ '/mnt/nfs/ansible/billing-hub/ojdbc7.jar' ]}" -t install_war_file
 ```

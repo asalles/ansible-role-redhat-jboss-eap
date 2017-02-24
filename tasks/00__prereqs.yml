@@ -1,13 +1,16 @@
-- name: "Check existence of the init.d script"
-  stat:
-    path: "/etc/systemd/system/{{ jboss_eap_instance_service_name }}.service"
-  register: jboss_eap_rhel_sh
+- name: "Check required directories and files exist"
+  stat: path="{{ item }}"
+  register: initial_file_check
+  with_items:
+  - "{{ jboss_eap_golden_image_dir }}"
+  - "{{ jboss_eap_golden_image_dir }}/{{ jboss_eap_golden_image_name }}.zip"
+  become: yes
 
-- name: "Stop JBoss EAP if already running"
-  when: jboss_eap_rhel_sh.stat.exists
-  service:
-    name: "{{ jboss_eap_instance_service_name }}"
-    state: stopped
+- name: "Fail when required directories do not exist"
+  fail:
+    msg: "Required Installation File or Directory is missing: {{ item.item }}"
+  when: "{{ item.stat.exists | bool}} == false"
+  with_items: "{{ initial_file_check.results }}"
 
 - name: Ensure ports aren't currently being used
   wait_for:
@@ -33,6 +36,21 @@
   - "{{ jboss_eap_jgroups_multicast_tcp_port + jboss_eap_instance_port_offset|int }}"
   - "{{ jboss_eap_modcluster_multicast_port + jboss_eap_instance_port_offset|int }}"
   - "{{ jboss_eap_outbound_proxy_port + jboss_eap_instance_port_offset|int }}"
+
+- name: "Check existence of the init.d script"
+  stat:
+    path: "/etc/systemd/system/{{ jboss_eap_instance_service_name }}.service"
+  register: jboss_eap_rhel_sh
+  tags:
+  - stop_eap
+
+- name: "Stop JBoss EAP if already running"
+  when: jboss_eap_rhel_sh.stat.exists
+  service:
+    name: "{{ jboss_eap_instance_service_name }}"
+    state: stopped
+  tags:
+  - stop_eap
 
 - name: "Step 1a. Create groups for App"
   group:
