@@ -36,7 +36,6 @@ This role has been tested on Ansible 2.0.2.0 and 2.1.1.0. It requires Red Hat En
 | `jboss_eap_golden_image_dir` | `/mnt/nfs/ansible/redhat/rh_jboss_golden_images/` | Directory of zip |
 | `java_jdk_rpm` | `/mnt/nfs/ansible/jdk-8u92-linux-x64.rpm`` | Java JDK RPM |
 | `jboss_eap_golden_image_name` | `jboss-eap-7.0.0` | Base name of zip file (without .zip extension) |
-java_jdk_rpm
 
 Dependencies
 ------------
