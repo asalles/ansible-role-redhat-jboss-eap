@@ -1,5 +1,5 @@
 ---
-- name: "Step 9. Ensure environment directory exists"
+- name: "Ensure environment directory exists"
   file:
     state: directory
     dest: "{{ item }}"
@@ -9,7 +9,7 @@
   - "{{ jboss_eap_base_dir }}/{{ jboss_eap_instance_name }}"
 
 
-- name: "Step 10. Unzip archive"
+- name: "Unzip archive"
   unarchive:
     src: "{{ jboss_eap_golden_image_dir }}/{{ jboss_eap_golden_image_name }}.zip"
     dest: "{{ jboss_eap_base_dir }}/{{ jboss_eap_instance_name }}"

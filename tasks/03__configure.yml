@@ -1,14 +1,14 @@
 ---
 # Initial creation of the standalone directory
 
-- name: "Step 11. Copy instance specific standalone.conf"
+- name: "Copy instance specific standalone.conf"
   template:
     owner: "{{ jboss_app_users.user }}"
     group: "{{ jboss_app_users.group }}"
     src: "standalone.conf.j2"
     dest: "{{ target_dir }}/standalone/configuration/standalone.conf"
 
-- name: "Step 12. Create the service and deployments directory"
+- name: "Create the service and deployments directory"
   file:
     path: "{{ item }}"
     owner: "{{ jboss_app_users.user }}"
@@ -20,7 +20,7 @@
   - "{{ target_dir }}/log"
   - "{{ target_dir }}/deployments"
 
-- name: "Step 13. Copy instance specific standalone-full-ha.xml"
+- name: "Copy instance specific standalone-full-ha.xml"
   template:
     owner: "{{ jboss_app_users.user }}"
     group: "{{ jboss_app_users.group }}"
@@ -28,7 +28,7 @@
     dest: "{{ target_dir }}/standalone/configuration/standalone-full-ha.xml"
 
 
-- name: "Step 14. jboss-eap-rhel.sh"
+- name: "jboss-eap-rhel.sh"
   template:
     owner: "{{ jboss_app_users.user }}"
     group: "{{ jboss_app_users.group }}"
@@ -36,7 +36,7 @@
     dest: "{{ target_dir }}/service/jboss-eap-rhel.sh"
     mode: "0750"
 
-- name: "Step 15. Generate service systemd unit file"
+- name: "Generate service systemd unit file"
   template:
     owner: "{{ jboss_app_users.user }}"
     group: "{{ jboss_app_users.group }}"
@@ -44,7 +44,7 @@
     dest: "{{ target_dir }}/service/{{ jboss_eap_instance_service_name }}.service"
     mode: "0750"
 
-- name: "Step 16. Generate instance.info file"
+- name: "Generate instance.info file"
   template:
     owner: "{{ jboss_app_users.user }}"
     group: "{{ jboss_app_users.group }}"
@@ -52,19 +52,19 @@
     dest: "{{ target_dir }}/instance.info"
     mode: "0640"
 
-- name: "Step 17. Create Management users"
+- name: "Create Management users"
   shell: "./add-user.sh -u '{{ item.user }}' -p '{{ item.password }}' --silent"
   args:
     chdir: "{{ target_dir }}/bin"
   with_items: "{{ jboss_management_users }}"
   no_log: true
 
-- name: "Step 18. Update permissions"
+- name: "Update permissions"
   file: path={{ item }} owner={{ jboss_app_users.user }} group={{ jboss_app_users.group }} state=directory recurse=yes mode="o-rx"
   with_items:
     - "{{ target_dir }}"
 
-- name: "Step 19. Update ACL"
+- name: "Update ACL"
   acl:
     name: "{{ target_dir }}"
     etype: "{{ item.type }}"

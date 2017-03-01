@@ -1,5 +1,5 @@
 ---
-- name: "Step 20. Copy service systemd unit file"
+- name: "Copy service systemd unit file"
   template:
     owner: "{{ jboss_app_users.user }}"
     group: "{{ jboss_app_users.group }}"
@@ -9,11 +9,11 @@
   register: conf_service
 
 # Reloading systemd. Should be executed here and not as a handler.
-- name: "Step 21. Reload systemd"
+- name: "Reload systemd"
   when: conf_service.changed
   command: systemctl daemon-reload
 
-- name: "Step 22. Ensure JBoss EAP is running"
+- name: "Ensure JBoss EAP is running"
   service:
     name: "{{ jboss_eap_instance_service_name }}"
     state: restarted
@@ -22,7 +22,7 @@
   tags:
   - start_eap
 
-- name: "Step 23. Install War file"
+- name: "Install War file"
   shell:  "./bin/jboss-cli.sh \
       --controller={{ jboss_eap_bind_address }}:{{ jboss_eap_instance_management_http_port|int +  jboss_eap_instance_port_offset|int}} \
       --connect \

@@ -24,18 +24,19 @@ This role has been tested on Ansible 2.0.2.0 and 2.1.1.0. It requires Red Hat En
 * RHEL 7+
 * Port Offset (`jboss_eap_instance_port_offset`)
 * Environment Name of your choosing (`environment_name`,`jboss_eap_instance_name`)
-* (optional) Java options, (`JAVA_OPTS`)
 * Timezone (`timezone`)
 * List of path to WARs to deploy(`jboss_eap_war_files`)
-* Interfaces to bind to ( Defaults to `jboss_eap_bind_address: "0.0.0.0"`, `jboss_eap_management_bind_address`")
+* Interfaces to bind to ( Defaults to `jboss_eap_bind_address: "127.0.0.1"`, `jboss_eap_management_bind_address: "127.0.0.1"` (localhost only, (0.0.0.0 *DOES NOT WORK*))}}/)
 
 *The following files must be present on server:*
 
 | Ansible Variable(s)  | Default Value       | Description          |
 |-------------------|---------------------|----------------------|
 | `jboss_eap_golden_image_dir` | `/mnt/nfs/ansible/redhat/rh_jboss_golden_images/` | Directory of zip |
+| `jboss_eap_golden_image_dir` | `/mnt/nfs/ansible/redhat/rh_jboss_golden_images/` | Directory of zip |
+| `java_jdk_rpm` | `/mnt/nfs/ansible/jdk-8u92-linux-x64.rpm`` | Java JDK RPM |
 | `jboss_eap_golden_image_name` | `jboss-eap-7.0.0` | Base name of zip file (without .zip extension) |
-
+java_jdk_rpm
 
 Dependencies
 ------------
@@ -75,7 +76,7 @@ Role Variables
 | `jboss_mod_cluster_proxies` | `proxyjbossweb{{ jboss_eap_instance_name }}` | Mod_cluster proxies name |
 | `jboss_outbound_socket_name` | `proxyjbossweb{{ jboss_eap_instance_name }}` | Outbound socket name |
 | jboss_management_users: <br> - user: admin1 <br>   password: "12345#%" <br> - user: admin2 <br>   password: "123456" | | List of administrator user accounts and passwords to configure |
-| `java_pkg_name` | `java-1.8.0-openjdk-devel` | Used java version: Java 8 JDK.  |
+| `java_jdk_rpm` | /mnt/nfs/ansible/jdk-8u92-linux-x64.rpm` | Used java version: Java 8 JDK.  |
 | `jboss_java_home` | `/usr/lib/jvm/java-1.8.0-openjdk` | Default JAVA_HOME |
 | `JAVA_OPTS` |  `-Djava.net.preferIPv4Stack=true -Xms8224m -Xmx8224m -XX:PermSize=526m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dorg.jboss.resolver.warning=true -server -Dgw.server.mode=dev -Djboss.as.management.blocking.timeout=1200` | Java params |
 | `jboss_eap_jgroups_multicast_address` | `230.0.0.4` | Default Address  |
@@ -85,6 +86,7 @@ Role Variables
 | `jboss_datasource` | `See Defaults/main.yml` | Datasource  |
 | `jboss_jndi_name` | `java:jboss/datasources/pcDataSource` | JNDI Name |
 | `jboss_jdbc_driver` | `See Defaults/main.yml` | JDBC Configuration |
+| `jboss_log_name` | `"jboss{{ jboss_eap_instance_name }}-server.log" | Server log filename|
 | `jboss_eap_force_remove` | `False` | Change this to true to remove the current installation for the environment|
 
 *Ports Variables*

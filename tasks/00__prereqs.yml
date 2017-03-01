@@ -4,6 +4,7 @@
   with_items:
   - "{{ jboss_eap_golden_image_dir }}"
   - "{{ jboss_eap_golden_image_dir }}/{{ jboss_eap_golden_image_name }}.zip"
+  - "{{ java_jdk_rpm }}"
   become: yes
 
 - name: "Fail when required directories do not exist"
@@ -11,6 +12,21 @@
     msg: "Required Installation File or Directory is missing: {{ item.item }}"
   when: "{{ item.stat.exists | bool}} == false"
   with_items: "{{ initial_file_check.results }}"
+
+- name: "Check existence of the init.d script"
+  stat:
+    path: "/etc/systemd/system/{{ jboss_eap_instance_service_name }}.service"
+  register: jboss_eap_rhel_sh
+  tags:
+  - stop_eap
+
+- name: "Stop JBoss EAP if already running"
+  when: jboss_eap_rhel_sh.stat.exists
+  service:
+    name: "{{ jboss_eap_instance_service_name }}"
+    state: stopped
+  tags:
+  - stop_eap
 
 - name: Ensure ports aren't currently being used
   wait_for:
@@ -52,7 +68,7 @@
   tags:
   - stop_eap
 
-- name: "Step 1a. Create groups for App"
+- name: "Create groups for App"
   group:
     name: "{{ item.group }}"
     system: yes
@@ -61,7 +77,7 @@
     - "{{ jboss_app_users }}"
   become: yes
 
-- name: "Step 1b. Create users for App"
+- name: "Create users for App"
   user:
     name: "{{ item.user }}"
     comment: "{{ item.user }} user"
@@ -72,14 +88,34 @@
   with_items:
     - "{{ jboss_app_users }}"
 
-- name: "Step 2. Install JDK 1.8"
+- name: "Create java directory"
+  file:
+    path: "{{ item }}"
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
+    state: directory
+    mode: "0750"
+  with_items:
+  - "{{ jboss_eap_base_dir }}/java"
+
+
+- name: "Install JDK 1.8"
   become: true
   yum: name={{ item }} state=present
   with_items:
    - unzip
-   - "{{ java_pkg_name }}"
+   - "{{ java_jdk_rpm }}"
 
-- name: "Step 3. Update .bash_profile"
+- name: "Create JDK Symlink"
+  become: true
+  file:
+    state: link
+    owner: "{{ jboss_app_users.user }}"
+    group: "{{ jboss_app_users.group }}"
+    src: "{{ jboss_java_home }}"
+    dest: "{{ jboss_eap_base_dir }}/java/{{ jboss_java_sdk_dir }}"
+
+- name: "Update .bash_profile"
   template:
     src: .bash_profile.j2
     dest: "{{ item.user_home }}/.bash_profile"
@@ -100,21 +136,4 @@
   with_items: "{{ user_limits }}"
   become: yes
 
-- name: "Create java directory"
-  file:
-    path: "{{ item }}"
-    owner: "{{ jboss_app_users.user }}"
-    group: "{{ jboss_app_users.group }}"
-    state: directory
-    mode: "0750"
-  with_items:
-  - "{{ jboss_eap_base_dir }}/java"
 
-- name: "Create JDK Symlink"
-  become: true
-  file:
-    state: link
-    owner: "{{ jboss_app_users.user }}"
-    group: "{{ jboss_app_users.group }}"
-    src: "{{ jboss_java_home }}"
-    dest: "{{ jboss_eap_base_dir }}/java/{{ jboss_java_sdk_dir }}"

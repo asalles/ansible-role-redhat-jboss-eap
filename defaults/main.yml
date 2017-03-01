@@ -48,6 +48,7 @@ jvm_xm: 512
 jboss_eap_max_post_size: 157286400
 jboss_mod_cluster_proxies: "proxyjbossweb{{ jboss_eap_instance_name }}"
 jboss_outbound_socket_name: "proxyjbossweb{{ jboss_eap_instance_name }}"
+jboss_log_name: "jboss{{ jboss_eap_instance_name }}-server.log"
 
 # Port offset for the JBoss EAP instance
 jboss_eap_instance_port_offset: 0
@@ -77,7 +78,7 @@ jboss_eap_modcluster_multicast_address: 224.0.1.105
 jboss_eap_outbound_proxy_port: 6666
 
 # Used java version: Java 8 JDK. See recommendation https://access.redhat.com/solutions/18259
-java_pkg_name: java-1.8.0-openjdk-devel
+java_jdk_rpm: /mnt/nfs/ansible/jdk-8u92-linux-x64.rpm
 
 JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Xms8224m -Xmx8224m -XX:PermSize=526m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dorg.jboss.resolver.warning=true -server -Dgw.server.mode=dev -Djboss.as.management.blocking.timeout=1200"
 
@@ -85,8 +86,8 @@ JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Xms8224m -Xmx8224m -XX:PermSize=526
 timezone: America/Los_Angeles
 
 # Default JAVA_HOME
-jboss_java_home: "/usr/lib/jvm/java-1.8.0-openjdk"
 jboss_java_sdk_dir: jdk1.8.0_92
+jboss_java_home: "/usr/java/{{ jboss_java_sdk_dir }}"
 
 user_limits:
 - domain: "{{ jboss_app_users.user }}"
