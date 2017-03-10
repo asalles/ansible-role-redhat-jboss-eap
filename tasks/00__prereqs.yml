@@ -104,6 +104,7 @@
   yum: name={{ item }} state=present
   with_items:
    - unzip
+   - bc
    - "{{ java_jdk_rpm }}"
 
 - name: "Create JDK Symlink"
