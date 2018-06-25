@@ -1,4 +1,4 @@
-mm0.rh-jboss-eap
+Red Hat JBoss EAP Ansible Role
 ================
 
 [![Build Status](https://travis-ci.org/mm0/ansible-role-redhat-jboss-eap.svg?branch=master)](https://travis-ci.org/mm0/ansible-role-redhat-jboss-eap) [![Galaxy](https://img.shields.io/badge/galaxy-mmo.rh--jboss--eap-blue.svg?style=flat)](https://galaxy.ansible.com/mm0/rh-jboss-eap)
