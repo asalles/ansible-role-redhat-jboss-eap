@@ -1,6 +1,6 @@
 ---
 - name: Bring up docker containers
-  hosts: localhost
+  hosts: "servers"
   gather_facts: false
   vars:
     inventory:
